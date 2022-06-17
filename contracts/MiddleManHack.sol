@@ -8,6 +8,10 @@ contract Telephone {
         owner = msg.sender;
     }
 
+    function getOwner() public view returns (address) {
+        return owner;
+    }
+
     function changeOwner(address _owner) public {
         if (tx.origin != msg.sender) {
             owner = _owner;

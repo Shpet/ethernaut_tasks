@@ -21,9 +21,17 @@ async function main() {
   const hack = await MiddleManHack.deploy();
   await hack.deployed();
 
+  const Telephone = await ethers.getContractFactory(
+    'Telephone',
+    deployer
+  );
+  const telephone = await Telephone.deploy();
+  await telephone.deployed();
+
   saveFrontendFiles({
     // name: contract
     MiddleManHack: hack,
+    Telephone: telephone
   });
 }
 
