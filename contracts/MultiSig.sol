@@ -36,7 +36,7 @@ contract MultiSig {
         REQUIRED_CONFIRMATIONS = required_confirmations_;
 
         require(
-            owners_.length >= REQUIRED_CONFIRMATIONS,
+            owners_.length >= required_confirmations_,
             "MultiSig: not enough owners"
         );
 
